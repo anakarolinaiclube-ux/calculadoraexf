@@ -2,226 +2,404 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Nova Vida | Ex-Fumante</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Calculadora de Liberdade - Plataforma Respira</title>
+    
+    <!-- Importando Fonte Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Ícones -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
     <style>
+        /* --- DESIGN SYSTEM: PREMIUM HIGH-CONTRAST --- */
         :root {
-            --primary: #26a69a; /* Verde água */
-            --primary-dark: #00796b;
-            --bg: #e0f2f1; /* Fundo muito claro */
-            --card: #ffffff;
-            --text: #37474f;
-            --text-light: #78909c;
+            --bg-body: #F5F4F0;       
+            --bg-card: #FFFFFF;       
+            --bg-dark: #111111;       
+            --bg-alt: #EBE7DF;        
+            
+            --text-main: #111111;     
+            --text-light: #5A5A58;    
+            --text-inverse: #FFFFFF;  
+            
+            --accent-black: #000000;
+            --accent-gold: #C29B62;   
+            --border-color: #DCD7CD;
+            
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --shadow-soft: 0 10px 25px -5px rgba(0,0,0,0.05);
+            --shadow-hard: 0 20px 40px rgba(0,0,0,0.15);
+            
+            --font-main: 'Poppins', sans-serif;
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 0;
+            font-family: var(--font-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            background-color: var(--bg-body);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4 { 
+            font-family: var(--font-main); 
+            font-weight: 700; 
+            color: var(--text-main); 
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+        }
+        
+        p, span, a { font-family: var(--font-main); }
+        a { text-decoration: none; color: inherit; }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* --- HEADER PLATAFORMA --- */
+        header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 0;
+        }
+        .header-inner { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.4rem; font-weight: 800; letter-spacing: -1px; text-transform: uppercase; color: var(--bg-dark); }
+        .logo span { font-weight: 300; color: var(--accent-gold); }
+        .nav-menu { display: flex; align-items: center; gap: 20px; }
+        .nav-menu a { font-size: 0.9rem; font-weight: 600; color: var(--text-light); transition: color 0.3s; }
+        .nav-menu a:hover { color: var(--bg-dark); }
+
+        /* --- LAYOUT CALCULADORA --- */
+        .dashboard-content { padding: 40px 0 80px; }
+        .welcome-header { margin-top: 30px; margin-bottom: 30px; text-align: center; }
+        .welcome-header h1 { font-size: 2.2rem; margin-bottom: 5px; }
+        .welcome-header p { color: var(--text-light); font-size: 1.05rem; }
+
+        /* --- FORMULÁRIO --- */
+        .calc-card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 40px;
+            box-shadow: var(--shadow-hard);
+            margin-bottom: 40px;
+            border: 1px solid var(--border-color);
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; color: var(--bg-dark); }
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-main);
+            font-size: 1rem;
+            color: var(--text-main);
+            background-color: var(--bg-body);
+            transition: all 0.3s ease;
+        }
+        .form-control:focus { outline: none; border-color: var(--accent-gold); background-color: var(--bg-card); }
+        
+        .btn-primary {
+            background-color: var(--bg-dark);
+            color: var(--text-inverse);
+            padding: 16px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+            transition: all 0.3s ease;
+            width: 100%;
+            border: 2px solid var(--bg-dark);
+            cursor: pointer;
+            margin-top: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            background: var(--card);
-            width: 100%;
-            max-width: 420px;
-            padding: 2rem;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            margin: 1rem;
-        }
-
-        h1 {
-            color: var(--primary-dark);
-            font-weight: 600;
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            text-align: center;
-        }
-
-        p.subtitle {
-            color: var(--text-light);
-            text-align: center;
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-
-        label {
-            display: block;
-            font-size: 0.85rem;
-            color: var(--text-light);
-            margin-bottom: 0.5rem;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 1rem;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-            outline: none;
-        }
-
-        input:focus {
-            border-color: var(--primary);
-        }
-
-        button {
-            width: 100%;
-            padding: 14px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 1rem;
-        }
-
-        button:hover {
-            background-color: var(--primary-dark);
-        }
-
-        button:disabled {
-            background-color: #b0bec5;
-            cursor: not-allowed;
-        }
-
-        #result-area {
-            margin-top: 2rem;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        /* Estilos injetados pelo backend */
-        .result-card {
-            background: #f1f8e9;
-            border: 1px solid #c5e1a5;
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-        }
-        .highlight {
-            color: var(--primary-dark);
-            font-weight: 700;
-            font-size: 1.8rem;
-            display: block;
-            margin: 0.5rem 0;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
             gap: 10px;
-            margin-top: 1rem;
-            text-align: left;
         }
-        .stat-item {
-            background: #fff;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-        }
-        .stat-label { color: var(--text-light); display: block; font-size: 0.75rem; }
-        .stat-value { font-weight: 600; color: var(--text); }
-        .ai-message {
-            margin-top: 1.5rem;
-            font-style: italic;
-            color: var(--primary-dark);
-            font-size: 0.9rem;
-            border-top: 1px solid #dcedc8;
-            padding-top: 1rem;
-        }
+        .btn-primary:hover { background-color: var(--accent-gold); border-color: var(--accent-gold); color: var(--bg-dark); }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* --- RESULTADOS --- */
+        #results-section { display: none; animation: fadeIn 0.6s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card {
+            background-color: var(--bg-dark);
+            color: var(--text-inverse);
+            padding: 25px;
+            border-radius: var(--radius-md);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card.gold { background-color: var(--accent-gold); color: var(--bg-dark); }
+        .stat-card i { position: absolute; right: -15px; bottom: -15px; font-size: 6rem; opacity: 0.1; }
+        .stat-card h4 { font-size: 0.9rem; font-weight: 500; margin-bottom: 5px; opacity: 0.9; }
+        .stat-card .value { font-size: 2.2rem; font-weight: 800; line-height: 1.1; }
+
+        /* --- BARRAS DE SAÚDE --- */
+        .health-card { background-color: var(--bg-card); border-radius: var(--radius-md); padding: 30px; border: 1px solid var(--border-color); margin-bottom: 40px; box-shadow: var(--shadow-soft); }
+        .health-title { font-size: 1.4rem; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        .health-title i { color: var(--accent-gold); }
+        
+        .health-item { margin-bottom: 20px; }
+        .health-item-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; font-weight: 600; }
+        .progress-bar-container { width: 100%; height: 10px; background-color: var(--bg-alt); border-radius: 5px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background-color: var(--accent-gold); width: 0%; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .progress-bar-fill.full { background-color: #1E8E3E; } /* Verde quando completo */
+
+        /* --- MENSAGEM DA IA --- */
+        .expert-section { background-color: var(--bg-alt); border-radius: var(--radius-lg); padding: 30px; display: flex; align-items: center; gap: 25px; }
+        .expert-avatar { width: 70px; height: 70px; background-color: var(--bg-dark); border-radius: 50%; display: flex; justify-content: center; align-items: center; flex-shrink: 0; border: 3px solid var(--accent-gold); }
+        .expert-avatar i { font-size: 1.8rem; color: var(--accent-gold); }
+        .expert-content h4 { font-size: 1.1rem; margin-bottom: 5px; }
+        .expert-content h5 { font-size: 0.8rem; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        .expert-content p { font-size: 0.95rem; color: var(--text-light); font-style: italic; }
+
+        .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: var(--text-inverse); animation: spin 1s ease-in-out infinite; display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- MEDIA QUERIES --- */
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .calc-card { padding: 25px; }
+            .expert-section { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Calculadora Nova Vida</h1>
-    <p class="subtitle">Veja o quanto você já economizou parando de fumar.</p>
-
-    <form id="calcForm">
-        <div class="form-group">
-            <label>Cigarros fumados por dia (antes)</label>
-            <input type="number" id="cigsPerDay" placeholder="Ex: 20" required min="1">
+    <header>
+        <div class="container header-inner">
+            <div class="logo">RESPIRA<span>.</span></div>
+            <div class="nav-menu">
+                <a href="#">Meus Protocolos</a>
+                <a href="#" class="active">Calculadora</a>
+            </div>
         </div>
+    </header>
 
-        <div class="form-group">
-            <label>Preço do maço (R$)</label>
-            <input type="number" id="packPrice" placeholder="Ex: 12.00" step="0.01" required min="1">
-        </div>
-
-        <div class="form-group">
-            <label>Data que parou</label>
-            <input type="date" id="startDate" required>
-        </div>
-
-        <button type="submit" id="btnCalc">Calcular Economia</button>
-    </form>
-
-    <div id="result-area"></div>
-</div>
-
-<script>
-    document.getElementById('calcForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
+    <main class="dashboard-content container">
         
-        const btn = document.getElementById('btnCalc');
-        const resultArea = document.getElementById('result-area');
-        
-        // Coleta dados
-        const cigsPerDay = document.getElementById('cigsPerDay').value;
-        const packPrice = document.getElementById('packPrice').value;
-        const startDate = document.getElementById('startDate').value;
+        <div class="welcome-header">
+            <h1>Sua Vida de Volta</h1>
+            <p>Descubra o impacto real da sua liberdade no seu bolso e na sua saúde.</p>
+        </div>
 
-        // UI Loading
-        btn.disabled = true;
-        btn.innerText = "Calculando...";
-        resultArea.innerHTML = "";
+        <div class="calc-card" id="form-section">
+            <form id="calc-form">
+                <div class="form-group">
+                    <label>Qual era o seu hábito?</label>
+                    <select id="type" class="form-control" onchange="toggleLabels()">
+                        <option value="cigarro">Cigarro Tradicional</option>
+                        <option value="pod">Pod / Vape / Cigarro Eletrônico</option>
+                    </select>
+                </div>
 
-        try {
-            const response = await fetch('/api/ai', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ cigsPerDay, packPrice, startDate })
-            });
+                <div class="form-group">
+                    <label id="label-cost">Preço médio do maço (R$)</label>
+                    <input type="number" id="cost" class="form-control" step="0.01" placeholder="Ex: 12.50" required>
+                </div>
 
-            const data = await response.json();
+                <div class="form-group">
+                    <label id="label-qty">Quantos cigarros você fumava por dia?</label>
+                    <input type="number" id="qty" class="form-control" placeholder="Ex: 15" required>
+                </div>
 
-            if (data.result) {
-                resultArea.innerHTML = data.result;
+                <div class="form-group">
+                    <label>Data que você parou de fumar</label>
+                    <input type="date" id="quit-date" class="form-control" required>
+                </div>
+
+                <button type="submit" class="btn-primary" id="btn-submit">
+                    <span id="btn-text">Calcular Minha Vitória</span>
+                    <div class="loading-spinner" id="btn-spinner"></div>
+                </button>
+            </form>
+        </div>
+
+        <!-- SEÇÃO DE RESULTADOS (INICIALMENTE OCULTA) -->
+        <div id="results-section">
+            <div class="stats-grid">
+                <div class="stat-card gold">
+                    <i class="fas fa-wallet"></i>
+                    <h4>Você já economizou</h4>
+                    <div class="value" id="res-money">R$ 0,00</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-ban"></i>
+                    <h4 id="res-avoided-label">Cigarros não fumados</h4>
+                    <div class="value" id="res-avoided">0</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-hourglass-half"></i>
+                    <h4>Tempo de vida recuperado</h4>
+                    <div class="value" id="res-time">0 dias</div>
+                </div>
+            </div>
+
+            <div class="health-card">
+                <h2 class="health-title"><i class="fas fa-heartbeat"></i> Sua Recuperação Física</h2>
+                
+                <div class="health-item">
+                    <div class="health-item-header">
+                        <span>Oxigenação do Sangue (12h)</span>
+                        <span id="pct-1">0%</span>
+                    </div>
+                    <div class="progress-bar-container"><div class="progress-bar-fill" id="bar-1"></div></div>
+                </div>
+
+                <div class="health-item">
+                    <div class="health-item-header">
+                        <span>Nicotina eliminada do corpo (72h)</span>
+                        <span id="pct-2">0%</span>
+                    </div>
+                    <div class="progress-bar-container"><div class="progress-bar-fill" id="bar-2"></div></div>
+                </div>
+
+                <div class="health-item">
+                    <div class="health-item-header">
+                        <span>Circulação e Pulmões melhorados (2 a 12 semanas)</span>
+                        <span id="pct-3">0%</span>
+                    </div>
+                    <div class="progress-bar-container"><div class="progress-bar-fill" id="bar-3"></div></div>
+                </div>
+
+                <div class="health-item">
+                    <div class="health-item-header">
+                        <span>Risco de Infarto cai pela metade (1 ano)</span>
+                        <span id="pct-4">0%</span>
+                    </div>
+                    <div class="progress-bar-container"><div class="progress-bar-fill" id="bar-4"></div></div>
+                </div>
+            </div>
+
+            <div class="expert-section">
+                <div class="expert-avatar"><i class="fas fa-brain"></i></div>
+                <div class="expert-content">
+                    <h4>Análise do Especialista</h4>
+                    <h5>Inteligência Artificial Respira</h5>
+                    <p id="ai-message">Conectando com a mente do especialista...</p>
+                </div>
+            </div>
+
+            <button class="btn-primary" style="background:transparent; color:var(--bg-dark); border:1px solid var(--border-color); margin-top:20px;" onclick="location.reload()">Refazer Cálculo</button>
+        </div>
+
+    </main>
+
+    <script>
+        // Limita a data máxima para hoje
+        document.getElementById('quit-date').max = new Date().toISOString().split("T")[0];
+
+        function toggleLabels() {
+            const type = document.getElementById('type').value;
+            if (type === 'pod') {
+                document.getElementById('label-cost').innerText = 'Preço médio do Pod/Vape (R$)';
+                document.getElementById('label-qty').innerText = 'Quantos dias durava 1 Pod?';
+                document.getElementById('res-avoided-label').innerText = 'Pods não consumidos';
             } else {
-                resultArea.innerHTML = "<p style='color:red; text-align:center'>Erro ao calcular.</p>";
+                document.getElementById('label-cost').innerText = 'Preço médio do maço (R$)';
+                document.getElementById('label-qty').innerText = 'Quantos cigarros você fumava por dia?';
+                document.getElementById('res-avoided-label').innerText = 'Cigarros não fumados';
+            }
+        }
+
+        document.getElementById('calc-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // UI Loading state
+            document.getElementById('btn-text').style.display = 'none';
+            document.getElementById('btn-spinner').style.display = 'block';
+            document.getElementById('btn-submit').disabled = true;
+
+            // Get values
+            const type = document.getElementById('type').value;
+            const cost = parseFloat(document.getElementById('cost').value);
+            const qty = parseFloat(document.getElementById('qty').value);
+            const quitDate = new Date(document.getElementById('quit-date').value);
+            const now = new Date();
+            
+            // Calculate Days
+            const diffTime = Math.abs(now - quitDate);
+            const daysFree = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+
+            let moneySaved = 0;
+            let unitsAvoided = 0;
+            let timeRegainedMinutes = 0; // Aproximadamente 11 min por cigarro
+
+            if (type === 'cigarro') {
+                const dailyCost = (cost / 20) * qty;
+                moneySaved = dailyCost * daysFree;
+                unitsAvoided = qty * daysFree;
+                timeRegainedMinutes = unitsAvoided * 11;
+            } else {
+                // Pod: cost / dias que durava
+                const dailyCost = cost / qty;
+                moneySaved = dailyCost * daysFree;
+                unitsAvoided = (1 / qty) * daysFree; 
+                timeRegainedMinutes = unitsAvoided * 300; // Valor arbitrário para ilustrar pods
             }
 
-        } catch (error) {
-            console.error(error);
-            resultArea.innerHTML = "<p style='color:red; text-align:center'>Erro de conexão.</p>";
-        } finally {
-            btn.disabled = false;
-            btn.innerText = "Calcular Economia";
-        }
-    });
-</script>
+            // Update UI
+            document.getElementById('res-money').innerText = `R$ ${moneySaved.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('res-avoided').innerText = Math.floor(unitsAvoided).toLocaleString('pt-BR');
+            
+            const hoursRegained = Math.floor(timeRegainedMinutes / 60);
+            const daysRegained = Math.floor(hoursRegained / 24);
+            document.getElementById('res-time').innerText = daysRegained > 0 ? `${daysRegained} dias` : `${hoursRegained} horas`;
 
+            // Health Bars (Time targets in days)
+            const updateBar = (id, targetDays) => {
+                let pct = Math.min(100, (daysFree / targetDays) * 100);
+                const bar = document.getElementById(`bar-${id}`);
+                bar.style.width = `${pct}%`;
+                document.getElementById(`pct-${id}`).innerText = `${Math.floor(pct)}%`;
+                if(pct === 100) bar.classList.add('full');
+            };
+
+            updateBar(1, 0.5); // 12 horas
+            updateBar(2, 3);   // 72 horas
+            updateBar(3, 84);  // 12 semanas
+            updateBar(4, 365); // 1 ano
+
+            // Switch Sections
+            document.getElementById('form-section').style.display = 'none';
+            document.getElementById('results-section').style.display = 'block';
+
+            // Fetch AI Message
+            try {
+                const aiReq = await fetch('/api/ai', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        moneySaved: moneySaved.toFixed(2), 
+                        daysFree: daysFree, 
+                        type: type === 'cigarro' ? 'cigarros' : 'pods eletrônicos' 
+                    })
+                });
+                const aiRes = await aiReq.json();
+                document.getElementById('ai-message').innerText = `"${aiRes.message}"`;
+            } catch (err) {
+                document.getElementById('ai-message').innerText = `"Cada dia longe do vício é uma grande vitória para o seu subconsciente. O Método Respira tem orgulho da sua jornada até aqui! Continue firme."`;
+            }
+        });
+    </script>
 </body>
 </html>
