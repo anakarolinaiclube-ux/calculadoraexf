@@ -1,89 +1,39 @@
-import OpenAI from 'openai';
-
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
-        return res.status(405).json({ result: "Método não permitido" });
+        return res.status(405).json({ error: 'Método não permitido' });
     }
 
     try {
-        const { cigsPerDay, packPrice, startDate } = req.body;
+        const { moneySaved, daysFree, type } = req.body;
 
-        // 1. Cálculos Matemáticos
-        const start = new Date(startDate);
-        const now = new Date();
-        const diffTime = Math.abs(now - start);
-        const daysSmokeFree = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+        const prompt = `Atuo como um treinador mental e hipnoterapeuta do 'Método Respira'. O aluno acabou de usar nossa calculadora. Ele está há ${daysFree} dias sem usar ${type} e já economizou R$ ${moneySaved}. Escreva uma mensagem curta (máximo 2 a 3 frases) e de alto impacto parabenizando-o. Fale sobre como o subconsciente dele está sendo curado, sobre a liberdade e saúde conquistadas. Tom premium, acolhedor e encorajador.`;
 
-        const cigsNotSmoked = daysSmokeFree * parseInt(cigsPerDay);
-        const pricePerCig = parseFloat(packPrice) / 20; // Maço padrão de 20
-        const totalSaved = cigsNotSmoked * pricePerCig;
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+            },
+            body: JSON.stringify({
+                model: 'gpt-3.5-turbo',
+                messages: [{ role: 'user', content: prompt }],
+                max_tokens: 150,
+                temperature: 0.7
+            })
+        });
+
+        const data = await response.json();
         
-        // Projeções
-        const dailyCost = parseInt(cigsPerDay) * pricePerCig;
-        const monthlySavings = dailyCost * 30;
-        const yearlySavings = dailyCost * 365;
-
-        // Formatação BRL
-        const fmt = (val) => val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-
-        // 2. Chamada OpenAI para Mensagem de Reforço
-        let aiMessage = "Continue firme! Sua saúde e seu bolso agradecem.";
-        
-        if (process.env.OPENAI_API_KEY) {
-            const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-            
-            const completion = await openai.chat.completions.create({
-                model: "gpt-4o-mini", // Modelo rápido e eficiente
-                messages: [
-                    {
-                        role: "system", 
-                        content: "Você é um assistente motivacional para ex-fumantes. Responda em Português do Brasil. Seja breve (máximo 1 frase)."
-                    },
-                    {
-                        role: "user",
-                        content: `O usuário não fuma há ${daysSmokeFree} dias. Economizou ${fmt(totalSaved)}. Deixou de fumar ${cigsNotSmoked} cigarros. Dê uma mensagem de parabéns focada na saúde ou na liberdade.`
-                    }
-                ],
-                max_tokens: 60,
-            });
-            aiMessage = completion.choices[0].message.content;
+        if (data.error) {
+            throw new Error(data.error.message);
         }
 
-        // 3. Montagem do HTML de resposta
-        const htmlResponse = `
-            <div class="result-card">
-                <div>Você economizou até agora:</div>
-                <span class="highlight">${fmt(totalSaved)}</span>
-                
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <span class="stat-label">Cigarros evitados</span>
-                        <span class="stat-value">${cigsNotSmoked}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Dias sem fumar</span>
-                        <span class="stat-value">${daysSmokeFree}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Economia Mensal</span>
-                        <span class="stat-value">${fmt(monthlySavings)}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Economia Anual</span>
-                        <span class="stat-value">${fmt(yearlySavings)}</span>
-                    </div>
-                </div>
+        const message = data.choices[0].message.content.trim();
 
-                <div class="ai-message">
-                    "${aiMessage}"
-                </div>
-            </div>
-        `;
-
-        return res.status(200).json({ result: htmlResponse });
+        res.status(200).json({ message });
 
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ result: "<p>Erro ao processar dados.</p>" });
+        console.error('Erro na API da IA:', error);
+        res.status(500).json({ message: "Sua liberdade não tem preço e sua mente já entendeu que você não precisa mais desse veneno. Continue respirando fundo, um dia de cada vez!" });
     }
 }
