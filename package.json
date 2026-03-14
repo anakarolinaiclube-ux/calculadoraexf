@@ -1,10 +1,11 @@
 {
-  "name": "ex-fumante-calculator",
+  "name": "calculadora-respira",
   "version": "1.0.0",
+  "description": "Calculadora de Economia Ex Fumante - Método Respira",
   "scripts": {
-    "start": "node index.js"
+    "start": "npx serve ."
   },
-  "dependencies": {
-    "openai": "^4.0.0"
+  "engines": {
+    "node": ">=18.x"
   }
 }
